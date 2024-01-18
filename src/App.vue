@@ -20,13 +20,15 @@ onMounted(() => {
 
 //const now = Date.prototype.toISOString();
 //const nowStr = dayjs().format('DD/MM/YYYY');
+
 const getStatusSeverity = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
 		return constants.statusLabel.idSetEntry[licenseStatus].severity;
 	};
 
-	const getStatusText = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
-		return constants.statusLabel.idSetEntry[licenseStatus].label;
-	};
+const getStatusText = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
+    return constants.statusLabel.idSetEntry[licenseStatus].label;
+};
+
 const products = ref();
 const columns = [
     { field: 'displayDate', header: 'Date', sortField: 'date'},
