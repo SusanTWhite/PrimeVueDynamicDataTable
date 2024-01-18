@@ -12,11 +12,16 @@ import { ref, onMounted } from 'vue';
 import { ProductService } from '@/service/ProductService';
 
 onMounted(() => {
+    alert(`date: ${nowStr}`);
     ProductService.getProductsMini().then((data) => (products.value = data));
 });
 
+const now = Date.prototype.toISOString();
+const nowStr = dayjs(now).format('DD/MM/YYYY');
+
 const products = ref();
 const columns = [
+    { field: 'date', header: 'Date'},
     { field: 'code', header: 'Code' },
     { field: 'name', header: 'Name' },
     { field: 'category', header: 'Category' },
