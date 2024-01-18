@@ -8,18 +8,17 @@
 </template>
 
 <script setup lang="ts">
-//const dayjs = require('dayjs');
 import { ref, onMounted } from 'vue';
+import dayjs from 'dayjs';
 import constants from '@helpers/constants.ts';
 import { ProductService } from '@services/ProductService.ts';
 
 onMounted(() => {
-    //alert(`date: ${nowStr}`);
+    alert(`date: ${nowStr}`);
     ProductService.getProductsMini().then((data) => (products.value = data));
 });
 
-//const now = Date.prototype.toISOString();
-//const nowStr = dayjs().format('DD/MM/YYYY');
+const nowStr = dayjs().format();
 
 const getStatusSeverity = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
 		return constants.statusLabel.idSetEntry[licenseStatus].severity;
