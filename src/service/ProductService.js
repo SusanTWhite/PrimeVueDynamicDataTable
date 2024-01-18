@@ -11,7 +11,9 @@ export const ProductService = {
                     category: 'Accessories',
                     quantity: 24,
                     inventoryStatus: 'INSTOCK',
-                    rating: 5
+                    rating: 5,
+                    date: '2024-01-18',
+                    displayDate: '1/18/24'
                 },
                 {
                     id: '1001',
@@ -23,7 +25,9 @@ export const ProductService = {
                     category: 'Accessories',
                     quantity: 61,
                     inventoryStatus: 'INSTOCK',
-                    rating: 4
+                    rating: 4,
+                    date: '2020-06-11',
+                    displayDate: '6/11/20'                    
                 },
                 {
                     id: '1002',
@@ -35,7 +39,9 @@ export const ProductService = {
                     category: 'Fitness',
                     quantity: 2,
                     inventoryStatus: 'LOWSTOCK',
-                    rating: 3
+                    rating: 3,
+                    date: '2020-09-04',
+                    displayDate: '9/4/20'                                        
                 },
                 {
                     id: '1003',
@@ -47,7 +53,9 @@ export const ProductService = {
                     category: 'Clothing',
                     quantity: 25,
                     inventoryStatus: 'INSTOCK',
-                    rating: 5
+                    rating: 5,
+                    date: '2021-10-08',
+                    displayDate: '10/8/21'                                        
                 },
                 {
                     id: '1004',
@@ -59,7 +67,9 @@ export const ProductService = {
                     category: 'Accessories',
                     quantity: 73,
                     inventoryStatus: 'INSTOCK',
-                    rating: 4
+                    rating: 4,
+                    date: '2023-02-26',
+                    displayDate: '2/26/23'                                        
                 },
                 {
                     id: '1005',
@@ -71,8 +81,11 @@ export const ProductService = {
                     category: 'Accessories',
                     quantity: 0,
                     inventoryStatus: 'OUTOFSTOCK',
-                    rating: 4
-                },
+                    rating: 4,
+                    date: '2022-11-14',
+                    displayDate: '11/14/22'                    
+                }
+                /*,
                 {
                     id: '1006',
                     code: 'bib36pfvm',
@@ -1195,13 +1208,14 @@ export const ProductService = {
                         }
                     ]
                 }
+                */
             ];
         },
 
         getProductsMini() {
             return Promise.resolve(this.getProductsData().slice(0, 5));
         },
-
+/*
         getProductsSmall() {
             return Promise.resolve(this.getProductsData().slice(0, 10));
         },
@@ -1217,6 +1231,7 @@ export const ProductService = {
         getProductsWithOrders() {
             return Promise.resolve(this.getProductsWithOrdersData());
         }
+*/
     };
 
     

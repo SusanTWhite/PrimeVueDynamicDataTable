@@ -2,28 +2,29 @@
 <template>
     <div class="card">
         <DataTable :value="products" tableStyle="min-width: 50rem">
-            <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"></Column>
+            <Column v-for="col of columns" :key="col.field" :field="col.field" :sortField="col.sortField ?? col.field" :header="col.header"></Column>
         </DataTable>
     </div>
 </template>
 
 <script setup>
+//const dayjs = require('dayjs');
 import { ref, onMounted } from 'vue';
 import { ProductService } from '@/service/ProductService';
 
 onMounted(() => {
-    alert(`date: ${nowStr}`);
+    //alert(`date: ${nowStr}`);
     ProductService.getProductsMini().then((data) => (products.value = data));
 });
 
-const now = Date.prototype.toISOString();
-const nowStr = dayjs(now).format('DD/MM/YYYY');
+//const now = Date.prototype.toISOString();
+//const nowStr = dayjs().format('DD/MM/YYYY');
 
 const products = ref();
 const columns = [
-    { field: 'date', header: 'Date'},
-    { field: 'code', header: 'Code' },
-    { field: 'name', header: 'Name' },
+    { field: 'displayDate', header: 'Date', sortField: 'date'},
+    { field: 'code', header: 'Code'},
+    { field: 'name', header: 'Name'},
     { field: 'category', header: 'Category' },
     { field: 'quantity', header: 'Quantity' }
 ];
