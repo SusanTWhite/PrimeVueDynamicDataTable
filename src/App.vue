@@ -7,10 +7,11 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 //const dayjs = require('dayjs');
 import { ref, onMounted } from 'vue';
-import { ProductService } from '@/service/ProductService';
+import constants from '@helpers/constants.ts';
+import { ProductService } from '@services/ProductService.ts';
 
 onMounted(() => {
     //alert(`date: ${nowStr}`);
@@ -19,7 +20,13 @@ onMounted(() => {
 
 //const now = Date.prototype.toISOString();
 //const nowStr = dayjs().format('DD/MM/YYYY');
+const getStatusSeverity = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
+		return constants.statusLabel.idSetEntry[licenseStatus].severity;
+	};
 
+	const getStatusText = (licenseStatus: keyof typeof constants.statusLabel.idSetEntry) => {
+		return constants.statusLabel.idSetEntry[licenseStatus].label;
+	};
 const products = ref();
 const columns = [
     { field: 'displayDate', header: 'Date', sortField: 'date'},
