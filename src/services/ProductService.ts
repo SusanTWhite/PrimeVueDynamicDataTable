@@ -27,7 +27,7 @@ export const ProductService = {
                     inventoryStatus: 'INSTOCK',
                     rating: 4,
                     date: '2020-06-11',
-                    displayDate: '6/11/20'                    
+                    displayDate: '6/11/20'
                 },
                 {
                     id: '1002',
@@ -37,11 +37,11 @@ export const ProductService = {
                     image: 'blue-band.jpg',
                     price: 79,
                     category: 'Fitness',
-                    quantity: 2,
-                    inventoryStatus: 'LOWSTOCK',
+                    quantity: 0,
+                    inventoryStatus: 'OUTOFSTOCK',
                     rating: 3,
                     date: '2020-09-04',
-                    displayDate: '9/4/20'                                        
+                    displayDate: '9/4/20'
                 },
                 {
                     id: '1003',
@@ -55,7 +55,7 @@ export const ProductService = {
                     inventoryStatus: 'INSTOCK',
                     rating: 5,
                     date: '2021-10-08',
-                    displayDate: '10/8/21'                                        
+                    displayDate: '10/8/21'
                 },
                 {
                     id: '1004',
@@ -65,11 +65,11 @@ export const ProductService = {
                     image: 'bracelet.jpg',
                     price: 15,
                     category: 'Accessories',
-                    quantity: 73,
-                    inventoryStatus: 'INSTOCK',
+                    quantity: 3,
+                    inventoryStatus: 'LOWSTOCK',
                     rating: 4,
                     date: '2023-02-26',
-                    displayDate: '2/26/23'                                        
+                    displayDate: '2/26/23'
                 },
                 {
                     id: '1005',
@@ -83,7 +83,8 @@ export const ProductService = {
                     inventoryStatus: 'OUTOFSTOCK',
                     rating: 4,
                     date: '2022-11-14',
-                    displayDate: '11/14/22'                    
+                    displayDate: '11/14/22',
+                    status: 'Medium'                    
                 }
                 /*,
                 {

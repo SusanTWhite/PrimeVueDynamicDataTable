@@ -33,7 +33,7 @@ const columns = [
     { field: 'displayDate', header: 'Date', sortField: 'date'},
     { field: 'code', header: 'Code'},
     { field: 'name', header: 'Name'},
-    { field: 'category', header: 'Category' },
+    { field: 'inventoryStatus', header: 'Status' },
     { field: 'quantity', header: 'Quantity' }
 ];
 
