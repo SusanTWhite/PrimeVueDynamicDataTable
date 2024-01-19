@@ -10,7 +10,7 @@ export default {
 				label: 'Back Ordered'
 			},
 			'0': {
-				severity: 'warning',
+				severity: 'info',
 				label: 'Low Stock'
 			},
 			'1': {
