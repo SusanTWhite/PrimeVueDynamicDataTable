@@ -12,7 +12,7 @@ import ChildComponent from './ChildComponent.vue';
 
 const parentFunction = () => {
   // Parent function logic
-  alert('Parent function executed');
+  alert('You just executed a parent component function from a child component!');
 };
 
 interface ColumnType {
