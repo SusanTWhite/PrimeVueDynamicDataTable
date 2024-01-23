@@ -23,13 +23,14 @@
         </DataTable>
     </div>
     <div>
-        <button @click="runCustomFunction">Run Function from Parent</button>
+        <button @click="runMe">Run Me - I'm a call to the Parent</button>
     </div>    
 </template>
 
 <script setup lang="ts">
 //import dayjs from 'dayjs';
 //import constants from '@helpers/constants.ts';
+import { computed } from 'vue'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Tag from 'primevue/tag';
@@ -68,9 +69,7 @@ function getLabel(key: keyof IdSetConfig): string | undefined {
   return entry ? entry.severity : undefined;
 }
 
-const runCustomFunction = () => {
-  props.customFunction();
-};
+const runMe = computed(() => props.customFunction)
 
 /*
 const nowStr = dayjs().format();
