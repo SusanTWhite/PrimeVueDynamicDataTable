@@ -33,29 +33,7 @@ type SeveritySet = {
 	label: string;
   };
  
-type IdSetConfig = Record<string, SeveritySet>;  
-
-interface ChildProps {
-  customFunction: () => void,
-  columns: ColumnType[],
-  dataSet: ProductType[],
-  idSet: IdSetConfig;
-}
-
-interface ProductType {
-    id: string,
-    code: string,
-    name: string,
-    description: string,
-    image: string,
-    price: number,
-    category: string,
-    quantity: number
-    inventoryStatus: string,
-    rating: number,
-    date: string,
-    displayDate: string
-}
+type IdSetConfig = Record<string, SeveritySet>;
 
 interface ColumnType { 
     field: string,
@@ -65,7 +43,16 @@ interface ColumnType {
     labelField?: string
 }
 
-const props = defineProps<ChildProps>();
+interface ChildProps<T> {
+  customFunction: () => void;
+  columns: ColumnType[];
+  dataSet: T[];
+  idSet: IdSetConfig;
+}
+
+type dataSetType<T> = T[];
+
+const props = defineProps<ChildProps<any>>();
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];

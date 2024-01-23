@@ -15,13 +15,30 @@ const parentFunction = () => {
   alert('Parent function executed');
 };
 
+type dataSetType<T> = T[];
+
+interface ProductType {
+    id: string,
+    code: string,
+    name: string,
+    description: string,
+    image: string,
+    price: number,
+    category: string,
+    quantity: number
+    inventoryStatus: string,
+    rating: number,
+    date: string,
+    displayDate: string
+}
+
 onMounted(() => {
     ProductService.getProductsMini().then((data) => (products.value = data));
 });
 
 const productIdSet = ref(constants.productIdSet);
-const products = ref();
-const columns = ref ([
+const products = ref<dataSetType<ProductType>>([]);
+const columns = ref([
     { field: 'displayDate', header: 'Date', sortField: 'date'},
     { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
     { field: 'name', header: 'Name', },
