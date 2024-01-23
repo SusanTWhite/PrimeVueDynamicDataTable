@@ -22,7 +22,9 @@
             </Column>
         </DataTable>
     </div>
-    
+    <div>
+        <button @click="runCustomFunction">Run Function from Parent</button>
+    </div>    
 </template>
 
 <script setup lang="ts">
@@ -66,12 +68,14 @@ function getLabel(key: keyof IdSetConfig): string | undefined {
   return entry ? entry.severity : undefined;
 }
 
-/*
-const nowStr = dayjs().format();
-
 const runCustomFunction = () => {
   props.customFunction();
 };
+
+/*
+const nowStr = dayjs().format();
+
+
 
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {
   const column = columns.find((col) => 'field' in col && col.field === field && 'severityField' in col && col.severityField !== undefined);
