@@ -4,8 +4,12 @@
             <Column v-for="col of columns" :key="col.field" :field="col.field" 
                     :sortField="col.sortField??col.field" :header="col.header" 
                     :severityField="col.severityField??null" :labelField="col.labelField??null">
-                <template #body="slotProps">                    
-                    <template v-if="col.severityField" >
+                <template #body="slotProps">
+                    <template v-if="col.severityField && col.labelField">
+                        <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
+                        <span class="sr-only"> {{ getLabel(slotProps.data[col.labelField]) }}</span>                        
+                    </template>                                        
+                    <template v-else-if="col.severityField" >
                         <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
                     </template>
                     <template v-else-if="col.labelField">
@@ -92,3 +96,18 @@ function getLabelFromField(columns: Column[], field: keyof Column, value: string
 }
 */
 </script>
+<style>
+.sr-only {
+  border: 0!important;
+  clip: rect(.0625rem,.0625rem,.0625rem,.0625rem)!important;
+  -webkit-clip-path: inset(50%)!important;
+  clip-path: inset(50%)!important;
+  height: .0625rem!important;
+  margin: -.0625rem!important;
+  overflow: hidden!important;
+  padding: 0!important;
+  position: absolute!important;
+  width: .0625rem!important;
+  white-space: nowrap!important
+}
+</style>
