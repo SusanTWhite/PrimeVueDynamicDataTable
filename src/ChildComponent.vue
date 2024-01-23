@@ -35,12 +35,12 @@ type SeveritySet = {
  
 type IdSetConfig = Record<string, SeveritySet>;
 
-interface ColumnType { 
-    field: string,
-    header: string,
-    sortField?: string,
-    severityField?: string,
-    labelField?: string
+interface ColumnType {
+  field: string;
+  header: string;
+  sortField?: string;
+  severityField?: string;
+  labelField?: string;
 }
 
 interface ChildProps<T> {

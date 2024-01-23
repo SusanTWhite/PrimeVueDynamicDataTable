@@ -15,6 +15,14 @@ const parentFunction = () => {
   alert('Parent function executed');
 };
 
+interface ColumnType {
+  field: string;
+  header: string;
+  sortField?: string;
+  severityField?: string;
+  labelField?: string;
+}
+
 interface ProductType {
     id: string,
     code: string,
@@ -36,7 +44,7 @@ onMounted(() => {
 
 const productIdSet = ref(constants.productIdSet);
 const products = ref<ProductType[]>([]);
-const columns = ref([
+const columns = ref<ColumnType[]>([
     { field: 'displayDate', header: 'Date', sortField: 'date'},
     { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
     { field: 'name', header: 'Name', },
