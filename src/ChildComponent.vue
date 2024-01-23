@@ -50,8 +50,6 @@ interface ChildProps<T> {
   idSet: IdSetConfig;
 }
 
-type dataSetType<T> = T[];
-
 const props = defineProps<ChildProps<any>>();
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
