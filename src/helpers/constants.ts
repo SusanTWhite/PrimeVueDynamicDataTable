@@ -1,12 +1,12 @@
-export type LabelSet = {
+export type severitySet = {
 	severity: string;
 	label: string;
   };
  
- export type IdSetEntryConfig = Record<string, LabelSet>;  
+export type IdSetConfig = Record<string, severitySet>;  
   
 export default {
-	idSetEntry: {
+	productIdSet: {
 		'-2': {
 		  severity: 'danger',
 		  label: 'Out of Stock'
@@ -23,5 +23,5 @@ export default {
 		  severity: 'success',
 		  label: 'In Stock'
 		}
-	  } as IdSetEntryConfig
+	  } as IdSetConfig
 };

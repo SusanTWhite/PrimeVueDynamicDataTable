@@ -1,12 +1,13 @@
 <template>
     <div>
-        <ChildComponent :customFunction="parentFunction" :products="products" :columns="columns"/>
+        <ChildComponent :customFunction="parentFunction" :columns="columns" :dataSet="products" :idSet="productIdSet" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { ProductService } from '@services/ProductService.ts';
+import constants from '@helpers/constants.ts'
 import ChildComponent from './ChildComponent.vue';
 
 const parentFunction = () => {
@@ -18,6 +19,7 @@ onMounted(() => {
     ProductService.getProductsMini().then((data) => (products.value = data));
 });
 
+const productIdSet = ref(constants.productIdSet);
 const products = ref();
 const columns = ref ([
     { field: 'displayDate', header: 'Date', sortField: 'date'},
