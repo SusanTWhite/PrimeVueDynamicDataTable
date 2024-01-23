@@ -15,8 +15,6 @@ const parentFunction = () => {
   alert('Parent function executed');
 };
 
-type dataSetType<T> = T[];
-
 interface ProductType {
     id: string,
     code: string,
@@ -37,7 +35,7 @@ onMounted(() => {
 });
 
 const productIdSet = ref(constants.productIdSet);
-const products = ref<dataSetType<ProductType>>([]);
+const products = ref<ProductType[]>([]);
 const columns = ref([
     { field: 'displayDate', header: 'Date', sortField: 'date'},
     { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
