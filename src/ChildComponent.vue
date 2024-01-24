@@ -24,6 +24,9 @@
     </div>
     <div>
         <button @click="runMe">Run Me - I'm a call to the Parent</button>
+    </div>
+    <div>
+        <button @click="runAnotherFunction">Call the Parent with parameters and return a value</button>
     </div>    
     <div>
         <button @click="callParentUtility">Utility - I call to utility function in the parent</button>
@@ -53,6 +56,7 @@ interface ColumnType {
 
 interface ChildProps<T> {
   customFunction: () => void;
+  anotherFunction: (data: Record<string, any>) => number;
   utilityFunctionName: string;
   utilityFunctionParams: any;
   columns: ColumnType[];
@@ -85,12 +89,24 @@ const callParentUtility = () => {
     const result = dateHelpers[props.utilityFunctionName](props.utilityFunctionParams);
     alert(`Parent Utility result: ${result}`);
   } else {
-    console.error(`Utility function ${props.utilityFunctionName} not found in dateHelpers.`);
+    alert(`Utility function ${props.utilityFunctionName} not found in dateHelpers.`);
   }
 };
 
+const runAnotherFunction = () => {
+  // Example object structure as a parameter
+  const dataObject = {
+    property1: 5,
+    property2: 10,
+  };
+  // Call the custom function with the object structure
+  const result = props.anotherFunction(dataObject);
+  alert(`Result from another parent function, this with parameters:  ${result}`);
+};  
+
 //runMe();
 //callParentUtility();
+runAnotherFunction();
 
 /*
 const nowStr = dayjs().format();
