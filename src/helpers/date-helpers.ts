@@ -1,24 +1,33 @@
 import dayjs from 'dayjs';
 
-type IndexableType = {
-	getDateStringFromTimestamp(timestamp: number | undefined): string;
-	// Add other utility functions with their respective signatures
+type IndexableFunctions = {
 	[key: string]: (...args: any[]) => any;
   };
-  
-  const dateHelpers: IndexableType = {
-	getDateStringFromTimestamp(timestamp: number | undefined): string {
-	  // Implementation of the function
-	  return timestamp ? dayjs(timestamp).format('MM/DD/YYYY') : '';
-	},
-	// Add other utility functions with their respective implementations
-  };
 
-  export default dateHelpers;
+type DateHelpersType = {
+  getDateStringFromTimestamp(timestamp: number | undefined): string;
+  // Add other utility functions without the need for indexing
+} & IndexableFunctions;
 
-  /*
-  export default {
-	getDateStringFromTimestamp(timestamp: number | undefined): string {
-		return timestamp ? dayjs.unix(timestamp).format('MM/DD/YYYY') : '';
-	}
-  */
+//The & syntax creates a type union making the 
+
+class DateHelpers implements DateHelpersType {
+  getDateStringFromTimestamp(timestamp: number | undefined): string {
+    // Implementation of the function
+    return timestamp ? dayjs(timestamp).format('MM/DD/YYYY') : '';
+  }
+  // Only specific functions are made indexable
+  [key: string]: (...args: any[]) => any;
+
+  now(): string {
+	return dayjs().toString();
+  }
+  // Add other utility functions without the need for indexing
+  // For example:
+  addDays(a: string, b: number): string {
+	return dayjs(a).add(b, 'day').format('MM/DD/YYYY');
+  }
+}
+
+const dateHelper: DateHelpersType = new DateHelpers();
+export default dateHelper;
