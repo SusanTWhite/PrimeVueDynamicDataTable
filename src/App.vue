@@ -1,4 +1,5 @@
 <template>
+    <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <div>
         <ChildComponent :customFunction="parentFunction" 
                         :columns="columns" 
@@ -15,6 +16,7 @@ import dayjs from 'dayjs'
 import { ProductService } from '@services/ProductService.ts';
 import constants from '@helpers/constants.ts'
 import ChildComponent from './ChildComponent.vue';
+import dateHelper from '@helpers/date-helpers';
 
 const parentFunction = () => {
   // Parent function logic
@@ -48,6 +50,11 @@ onMounted(() => {
     ProductService.getProductsMini().then((data) => (products.value = data));
     utilityFunctionParams.value = dayjs();
 });
+
+const parentDirect = () => {
+    const result = dateHelper.addDays(dateHelper.now(), 1);
+    alert(`Parent direct call result: ${result}`);
+}
 
 const utilityFunctionName = ref('getDateStringFromTimestamp');
 const utilityFunctionParams = ref<any>(null);
