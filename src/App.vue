@@ -2,6 +2,7 @@
     <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <div>
         <ChildComponent :customFunction="parentFunction" 
+                        :anotherFunction="anotherParentFunction" 
                         :columns="columns" 
                         :dataSet="products" 
                         :idSet="productIdSet" 
@@ -23,6 +24,16 @@ const parentFunction = () => {
   alert('You just executed a parent component function from a child component!');
 };
 
+const anotherParentFunction = (data: any) => {
+  // Custom logic to process the object structure
+  // For example, summing the values of some properties
+  return data.property1 + data.property2;
+};
+
+interface DataObject {
+  property1: number;
+  property2: number;
+}
 interface ColumnType {
   field: string;
   header: string;
