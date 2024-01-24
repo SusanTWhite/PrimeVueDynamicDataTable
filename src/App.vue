@@ -1,11 +1,17 @@
 <template>
     <div>
-        <ChildComponent :customFunction="parentFunction" :columns="columns" :dataSet="products" :idSet="productIdSet" />
+        <ChildComponent :customFunction="parentFunction" 
+                        :columns="columns" 
+                        :dataSet="products" 
+                        :idSet="productIdSet" 
+                        :utilityFunctionName="utilityFunctionName" 
+                        :utilityFunctionParams="utilityFunctionParams" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import dayjs from 'dayjs'
 import { ProductService } from '@services/ProductService.ts';
 import constants from '@helpers/constants.ts'
 import ChildComponent from './ChildComponent.vue';
@@ -40,8 +46,11 @@ interface ProductType {
 
 onMounted(() => {
     ProductService.getProductsMini().then((data) => (products.value = data));
+    utilityFunctionParams.value = dayjs();
 });
 
+const utilityFunctionName = ref('getDateStringFromTimestamp');
+const utilityFunctionParams = ref<any>(null);
 const productIdSet = ref(constants.productIdSet);
 const products = ref<ProductType[]>([]);
 const columns = ref<ColumnType[]>([

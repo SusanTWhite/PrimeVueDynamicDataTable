@@ -25,12 +25,16 @@
     <div>
         <button @click="runMe">Run Me - I'm a call to the Parent</button>
     </div>    
+    <div>
+        <button @click="callParentUtility">Utility - I call to utility function in the parent</button>
+    </div> 
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 //import dayjs from 'dayjs';
 //import constants from '@helpers/constants.ts';
-import { computed } from 'vue'
+import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Tag from 'primevue/tag';
@@ -52,12 +56,14 @@ interface ColumnType {
 
 interface ChildProps<T> {
   customFunction: () => void;
+  utilityFunctionName: string;
+  utilityFunctionParams: any;
   columns: ColumnType[];
   dataSet: T[];
   idSet: IdSetConfig;
 }
 
-const props = defineProps<ChildProps<any>>();
+const props = defineProps<ChildProps<any>>();  
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];
@@ -69,12 +75,28 @@ function getLabel(key: keyof IdSetConfig): string | undefined {
   return entry ? entry.severity : undefined;
 }
 
-const runMe = computed(() => props.customFunction)
+// Create a method to call the custom function from child
+const runMe = () => {
+  // Call the custom function directly
+  props.customFunction();
+};
+
+// Call the utility function dynamically
+const callParentUtility = () => {
+  // Ensure the utility function exists before calling
+  if (typeof dateHelpers[props.utilityFunctionName] === 'function') {
+    const result = dateHelpers[props.utilityFunctionName](props.utilityFunctionParams);
+    alert(`Parent Utility result: ${result}`);
+  } else {
+    console.error(`Utility function ${props.utilityFunctionName} not found in dateHelpers.`);
+  }
+};
+
+//runMe();
+callParentUtility();
 
 /*
 const nowStr = dayjs().format();
-
-
 
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {
   const column = columns.find((col) => 'field' in col && col.field === field && 'severityField' in col && col.severityField !== undefined);
