@@ -29,7 +29,7 @@
         <button @click="runAnotherFunction">Call the Parent with parameters and return a value</button>
     </div>    
     <div>
-        <button @click="callParentUtility">Utility - I call to utility function in the parent</button>
+        <button @click="callParentUtility">Utility - I call to a utility function in the parent</button>
     </div> 
 </template>
 
@@ -56,7 +56,8 @@ interface ColumnType {
 
 interface ChildProps<T> {
   customFunction: () => void;
-  anotherFunction: (data: Record<string, any>) => number;
+  anotherFunction: (data: { property1: number; property2: number }) => number;
+  dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
   columns: ColumnType[];
@@ -94,19 +95,14 @@ const callParentUtility = () => {
 };
 
 const runAnotherFunction = () => {
-  // Example object structure as a parameter
-  const dataObject = {
-    property1: 5,
-    property2: 10,
-  };
   // Call the custom function with the object structure
-  const result = props.anotherFunction(dataObject);
+  const result = props.anotherFunction(props.dataObjectValues);
   alert(`Result from another parent function, this with parameters:  ${result}`);
 };  
 
 //runMe();
 //callParentUtility();
-runAnotherFunction();
+//runAnotherFunction();
 
 /*
 const nowStr = dayjs().format();
