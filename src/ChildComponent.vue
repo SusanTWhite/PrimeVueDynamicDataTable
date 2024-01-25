@@ -1,39 +1,44 @@
 <template>
   <div class="card">
-        <DataTable :value="dataSet" tableStyle="min-width: 50rem">
-            <Column v-for="col of columns" :key="col.field" :field="col.field" 
-                    :sortField="col.sortField??col.field" :header="col.header" 
-                    :severityField="col.severityField??null" :labelField="col.labelField??null">
-                <template #body="slotProps">
-                    <template v-if="col.severityField && col.labelField">
-                        <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
-                        <span class="sr-only"> {{ getLabel(slotProps.data[col.labelField]) }}</span>                        
-                    </template>                                        
-                    <template v-else-if="col.severityField" >
-                        <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
-                    </template>
-                    <template v-else-if="col.labelField">
-                        {{ getLabel(slotProps.data[col.labelField]) }}
-                    </template>
-                    <template v-else>
-                        {{ slotProps.data[col.field] }}
-                    </template>
-                </template>                
-            </Column>
-        </DataTable>
-    </div>
-    <div>
-        <button @click="runMe">Run Me - I'm a call to the Parent</button>
-    </div>
-    <div>
-        <button @click="runAnotherFunction">Call the Parent with parameters and return a value</button>
-    </div>    
-    <div>
-        <button @click="callParentUtility">Utility - I call to a utility function in the parent</button>
-    </div> 
+    <DataTable :value="dataSet" tableStyle="min-width: 50rem">
+        <Column v-for="col of columns" :key="col.field" :field="col.field" 
+                :sortField="col.sortField??col.field" :header="col.header" 
+                :severityField="col.severityField??null" :labelField="col.labelField??null">
+          <template #body="slotProps">
+            <template v-if="col.severityField && col.labelField">
+              <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
+              <span class="sr-only"> {{ getLabel(slotProps.data[col.labelField]) }}</span>                        
+            </template>                                        
+            <template v-else-if="col.severityField" >
+              <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
+            </template>
+            <template v-else-if="col.labelField">
+              {{ getLabel(slotProps.data[col.labelField]) }}
+            </template>
+            <template v-else>
+              {{ slotProps.data[col.field] }}
+            </template>
+          </template>                
+        </Column>
+    </DataTable>
+  </div>
+  <div>
+    <button @click="runMe">Run Me - I'm a call to the Parent</button>
+  </div>
+  <div>
+    <button @click="runAnotherFunction">Call the Parent with passed parameters and return a value within the Parent</button>
+  </div>    
+  <div>
+    <button @click="callParentUtility">Utility - calls to a function referenced in the Parent</button>
+  </div>
+  <div>
+    <button @click="runYetAnotherFunction">Call the Parent without passing parameters - results to the Child</button>
+    <div v-if="result !== null">Result from Parent: {{ result }}</div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -57,6 +62,7 @@ interface ColumnType {
 interface ChildProps<T> {
   customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
+  triggerParentFunction: () => number;
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -66,6 +72,7 @@ interface ChildProps<T> {
 }
 
 const props = defineProps<ChildProps<any>>();  
+const result = ref<number | null>(null);
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];
@@ -100,6 +107,10 @@ const runAnotherFunction = () => {
   alert(`Result from another parent function, this with parameters:  ${result}`);
 };  
 
+const runYetAnotherFunction = () => {
+  // Trigger the function in the ParentComponent
+  result.value = props.triggerParentFunction();
+};
 //runMe();
 //callParentUtility();
 //runAnotherFunction();

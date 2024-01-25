@@ -1,7 +1,8 @@
 <template>
     <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <div>
-        <ChildComponent :customFunction="parentFunction" 
+        <ChildComponent :triggerParentFunction="triggerParentFunction"
+                        :customFunction="parentFunction" 
                         :anotherFunction="anotherParentFunction"
                         :dataObjectValues="dataObjectValues" 
                         :columns="columns" 
@@ -20,6 +21,11 @@ import constants from '@helpers/constants.ts'
 import ChildComponent from './ChildComponent.vue';
 import dateHelper from '@helpers/date-helpers';
 
+const result = ref<number | null>(null);
+const dataObjectValues = ref({ property1: 13, property2: 114 });
+const param1 = ref<number>(0);
+const param2 = ref<number>(0);
+
 const parentFunction = () => {
   // Parent function logic
   alert('You just executed a parent component function from a child component!');
@@ -31,15 +37,25 @@ const anotherParentFunction = (data: any) => {
   return data.property1 + data.property2;
 };
 
+const yetAnotherFunction = (property1: number, property2: number) => {
+  //keeping all the data in the parent and only returning the outcome to the child as needed for use
+  return property1 + property2;
+};
+
+// Function triggered by ChildComponent
+const triggerParentFunction = () => {
+  // Parameters defined in the parent
+  const property1 = param1.value;
+  const property2 = param2.value;
+
+  // Call another function with parameters and set the result
+  return result.value = yetAnotherFunction(property1, property2);
+};
+
 interface DataObject {
   property1: number;
   property2: number;
 }
-
-const dataObjectValues: DataObject = {
-  property1: 15,
-  property2: 20,
-};
 
 interface ColumnType {
   field: string;
@@ -67,6 +83,8 @@ interface ProductType {
 onMounted(() => {
     ProductService.getProductsMini().then((data) => (products.value = data));
     utilityFunctionParams.value = dayjs();
+    param1.value = 37;
+    param2.value = 12;
 });
 
 const parentDirect = () => {
