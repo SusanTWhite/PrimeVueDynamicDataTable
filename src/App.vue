@@ -2,7 +2,8 @@
     <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <div>
         <ChildComponent :customFunction="parentFunction" 
-                        :anotherFunction="anotherParentFunction" 
+                        :anotherFunction="anotherParentFunction"
+                        :dataObjectValues="dataObjectValues" 
                         :columns="columns" 
                         :dataSet="products" 
                         :idSet="productIdSet" 
@@ -34,6 +35,12 @@ interface DataObject {
   property1: number;
   property2: number;
 }
+
+const dataObjectValues: DataObject = {
+  property1: 15,
+  property2: 20,
+};
+
 interface ColumnType {
   field: string;
   header: string;
