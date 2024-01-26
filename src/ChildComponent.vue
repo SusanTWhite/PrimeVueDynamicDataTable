@@ -1,6 +1,16 @@
 <template>
   <div class="card">
     <DataTable :value="dataSet" tableStyle="min-width: 50rem">
+        <template #header>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <InputText
+              style="width: 300px;"
+              v-model="updateSearch"
+              type="text"
+              placeholder="Search by name using ENTER to submit" 
+              @keyup.enter="runAFancierFunction"/>
+          </div>
+        </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
                 :sortField="col.sortField??col.field" :header="col.header" 
                 :severityField="col.severityField??null" :labelField="col.labelField??null">
@@ -21,6 +31,7 @@
           </template>                
         </Column>
     </DataTable>
+    <!-- div v-if="fancyResult !== null && fancyResult.length > 0">Fancy result from parent: {{ fancyResult }}</div -->
   </div>
   <div>
     <button @click="runMe">Run Me - I'm a call to the Parent</button>
@@ -63,6 +74,7 @@ interface ChildProps<T> {
   customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
+  aFancierFunction: (param1: string) => T[];
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -73,6 +85,8 @@ interface ChildProps<T> {
 
 const props = defineProps<ChildProps<any>>();  
 const result = ref<number | null>(null);
+const fancyResult = ref<any[] | null>(null);
+const updateSearch = ref<string>('');
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];
@@ -111,9 +125,12 @@ const runYetAnotherFunction = () => {
   // Trigger the function in the ParentComponent
   result.value = props.triggerParentFunction();
 };
-//runMe();
-//callParentUtility();
-//runAnotherFunction();
+
+const runAFancierFunction = () => {
+  fancyResult.value = props.aFancierFunction(updateSearch.value);
+  //alert(`Partial result value ${fancyResult.value[0].name;}`);
+  updateSearch.value = '';
+};
 
 /*
 const nowStr = dayjs().format();

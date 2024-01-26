@@ -4,9 +4,10 @@
         <ChildComponent :triggerParentFunction="triggerParentFunction"
                         :customFunction="parentFunction" 
                         :anotherFunction="anotherParentFunction"
+                        :aFancierFunction="searchFunction"
                         :dataObjectValues="dataObjectValues" 
                         :columns="columns" 
-                        :dataSet="products" 
+                        :dataSet="products"
                         :idSet="productIdSet" 
                         :utilityFunctionName="utilityFunctionName" 
                         :utilityFunctionParams="utilityFunctionParams" />
@@ -25,32 +26,19 @@ const result = ref<number | null>(null);
 const dataObjectValues = ref({ property1: 13, property2: 114 });
 const param1 = ref<number>(0);
 const param2 = ref<number>(0);
+const searchValue = ref<string>('');
 
-const parentFunction = () => {
-  // Parent function logic
-  alert('You just executed a parent component function from a child component!');
-};
-
-const anotherParentFunction = (data: any) => {
-  // Custom logic to process the object structure
-  // For example, summing the values of some properties
-  return data.property1 + data.property2;
-};
-
-const yetAnotherFunction = (property1: number, property2: number) => {
-  //keeping all the data in the parent and only returning the outcome to the child as needed for use
-  return property1 + property2;
-};
-
-// Function triggered by ChildComponent
-const triggerParentFunction = () => {
-  // Parameters defined in the parent
-  const property1 = param1.value;
-  const property2 = param2.value;
-
-  // Call another function with parameters and set the result
-  return result.value = yetAnotherFunction(property1, property2);
-};
+const utilityFunctionName = ref('getDateStringFromTimestamp');
+const utilityFunctionParams = ref<any>(null);
+const productIdSet = ref(constants.productIdSet);
+const products = ref<ProductType[]>([]);
+const columns = ref<ColumnType[]>([
+    { field: 'displayDate', header: 'Date', sortField: 'date'},
+    { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
+    { field: 'name', header: 'Name', },
+    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus'},
+    { field: 'quantity', header: 'Quantity'}
+]);
 
 interface DataObject {
   property1: number;
@@ -87,20 +75,40 @@ onMounted(() => {
     param2.value = 12;
 });
 
+const parentFunction = () => {
+  // Parent function logic
+  alert('You just executed a parent component function from a child component!');
+};
+
+const anotherParentFunction = (data: any) => {
+  // Custom logic to process the object structure
+  // For example, summing the values of some properties
+  return data.property1 + data.property2;
+};
+
+const yetAnotherFunction = (property1: number, property2: number) => {
+  //keeping all the data in the parent and only returning the outcome to the child as needed for use
+  return property1 + property2;
+};
+
+// Function triggered by ChildComponent
+const triggerParentFunction = () => {
+  // Parameters defined in the parent
+  const property1 = param1.value;
+  const property2 = param2.value;
+
+  // Call another function with parameters and set the result
+  return result.value = yetAnotherFunction(property1, property2);
+};
+
 const parentDirect = () => {
     const result = dateHelper.addDays(dateHelper.now(), 1);
     alert(`Parent direct call result: ${result}`);
 }
 
-const utilityFunctionName = ref('getDateStringFromTimestamp');
-const utilityFunctionParams = ref<any>(null);
-const productIdSet = ref(constants.productIdSet);
-const products = ref<ProductType[]>([]);
-const columns = ref<ColumnType[]>([
-    { field: 'displayDate', header: 'Date', sortField: 'date'},
-    { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
-    { field: 'name', header: 'Name', },
-    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus'},
-    { field: 'quantity', header: 'Quantity'}
-]);
+const searchFunction = (searchValue: string) => {
+    //alert(`Parent received search value: ${searchValue}`)
+    const derivedData = products.value.filter((row) => row.name.includes(searchValue));
+    return derivedData;
+};
 </script>
