@@ -7,7 +7,7 @@
                         :aFancierFunction="searchFunction"
                         :dataObjectValues="dataObjectValues" 
                         :columns="columns" 
-                        :dataSet="products"
+                        :dataSet="productsDataSet"
                         :idSet="productIdSet" 
                         :utilityFunctionName="utilityFunctionName" 
                         :utilityFunctionParams="utilityFunctionParams" />
@@ -26,12 +26,12 @@ const result = ref<number | null>(null);
 const dataObjectValues = ref({ property1: 13, property2: 114 });
 const param1 = ref<number>(0);
 const param2 = ref<number>(0);
-const searchValue = ref<string>('');
 
 const utilityFunctionName = ref('getDateStringFromTimestamp');
 const utilityFunctionParams = ref<any>(null);
 const productIdSet = ref(constants.productIdSet);
 const products = ref<ProductType[]>([]);
+const productsDataSet = ref<ProductType[]>([]);
 const columns = ref<ColumnType[]>([
     { field: 'displayDate', header: 'Date', sortField: 'date'},
     { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
@@ -69,7 +69,10 @@ interface ProductType {
 }
 
 onMounted(() => {
-    ProductService.getProductsMini().then((data) => (products.value = data));
+    ProductService.getProductsMini().then((data) => {
+        products.value = data; 
+        productsDataSet.value = data;
+    });
     utilityFunctionParams.value = dayjs();
     param1.value = 37;
     param2.value = 12;
@@ -108,7 +111,8 @@ const parentDirect = () => {
 
 const searchFunction = (searchValue: string) => {
     //alert(`Parent received search value: ${searchValue}`)
-    const derivedData = products.value.filter((row) => row.name.includes(searchValue));
-    return derivedData;
+    productsDataSet.value = products.value.filter((row) => row.name.includes(searchValue));
+    //const derivedData = products.value.filter((row) => row.name.includes(searchValue));    
+    //return derivedData;
 };
 </script>

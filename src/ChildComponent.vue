@@ -4,11 +4,12 @@
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2">
             <InputText
-              style="width: 300px;"
+              style="width: 75%"
               v-model="updateSearch"
               type="text"
-              placeholder="Search by name using ENTER to submit" 
-              @keyup.enter="runAFancierFunction"/>
+              placeholder="Search by name using ENTER to submit or ESCAPE to reset" 
+              @keyup.enter="runAFancierFunction" 
+              @keyup.escape="runAFancierFunction" />
           </div>
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
@@ -31,7 +32,6 @@
           </template>                
         </Column>
     </DataTable>
-    <!-- div v-if="fancyResult !== null && fancyResult.length > 0">Fancy result from parent: {{ fancyResult }}</div -->
   </div>
   <div>
     <button @click="runMe">Run Me - I'm a call to the Parent</button>
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -74,7 +74,8 @@ interface ChildProps<T> {
   customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
-  aFancierFunction: (param1: string) => T[];
+  //aFancierFunction: (param1: string) => T[];
+  aFancierFunction: (param1: string) => void;  
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -85,8 +86,9 @@ interface ChildProps<T> {
 
 const props = defineProps<ChildProps<any>>();  
 const result = ref<number | null>(null);
-const fancyResult = ref<any[] | null>(null);
+//const fancyResult = ref<any[] | null>(null);
 const updateSearch = ref<string>('');
+const internalDataSet = ref([...props.dataSet]);
 
 function getSeverity(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];
@@ -127,9 +129,13 @@ const runYetAnotherFunction = () => {
 };
 
 const runAFancierFunction = () => {
-  fancyResult.value = props.aFancierFunction(updateSearch.value);
-  //alert(`Partial result value ${fancyResult.value[0].name;}`);
-  updateSearch.value = '';
+  //fancyResult.value = props.aFancierFunction(updateSearch.value);
+  if (updateSearch.value.length > 0) {
+    props.aFancierFunction(updateSearch.value);
+    updateSearch.value = '';
+  }
+  else  
+    props.aFancierFunction('');
 };
 
 /*
@@ -157,6 +163,13 @@ function getLabelFromField(columns: Column[], field: keyof Column, value: string
   return null
 }
 */
+
+watch(
+  () => props.dataSet,
+  (newDataSet) => {
+    internalDataSet.value = [...newDataSet];
+  }
+);
 </script>
 <style>
 .sr-only {
