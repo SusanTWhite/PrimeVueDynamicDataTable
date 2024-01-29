@@ -109,7 +109,7 @@ const parentDirect = () => {
     alert(`Parent direct call result: ${result}`);
 }
 
-const searchFunction = (searchValue: string) => {
+const searchFunction = async (searchValue: string) => {
     //alert(`Parent received search value: ${searchValue}`)
     productsDataSet.value = products.value.filter((row) => row.name.includes(searchValue));
     //const derivedData = products.value.filter((row) => row.name.includes(searchValue));    
