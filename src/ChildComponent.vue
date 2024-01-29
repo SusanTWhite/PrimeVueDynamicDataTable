@@ -14,7 +14,7 @@
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
                 :sortField="col.sortField??col.field" :header="col.header" 
-                :severityField="col.severityField??null" :labelField="col.labelField??null">
+                :severityField="col.severityField??null" :labelField="col.labelField??null" sortable>
           <template #body="slotProps">
             <template v-if="col.severityField && col.labelField">
               <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
