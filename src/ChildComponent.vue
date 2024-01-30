@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <DataTable :value="dataSet" tableStyle="min-width: 50rem">
+    <DataTable :value="dataSet" ref="dt" tableStyle="min-width: 50rem">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2">
             <InputText
@@ -31,6 +31,11 @@
             </template>
           </template>                
         </Column>
+        <template #footer>
+          <div style="text-align: right">
+            <Button icon="pi pi-external-link" label="Export as CSV" @click="exportCSV()" />
+          </div>
+        </template>
     </DataTable>
   </div>
   <div>
@@ -74,7 +79,6 @@ interface ChildProps<T> {
   customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
-  //aFancierFunction: (param1: string) => T[];
   aFancierFunction: (param1: string) => Promise<void>;  
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
@@ -84,9 +88,9 @@ interface ChildProps<T> {
   idSet: IdSetConfig;
 }
 
+const dt = ref();
 const props = defineProps<ChildProps<any>>();  
 const result = ref<number | null>(null);
-//const fancyResult = ref<any[] | null>(null);
 const updateSearch = ref<string>('');
 const internalDataSet = ref([...props.dataSet]);
 
@@ -138,6 +142,9 @@ const runAFancierFunction = async () => {
     await props.aFancierFunction('');
 };
 
+const exportCSV = () => {
+    dt.value.exportCSV();
+};
 /*
 const nowStr = dayjs().format();
 
