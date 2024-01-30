@@ -14,7 +14,7 @@
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
                 :sortField="col.sortField??col.field" :header="col.header" 
-                :severityField="col.severityField??null" :labelField="col.labelField??null">
+                :severityField="col.severityField??null" :labelField="col.labelField??null" sortable>
           <template #body="slotProps">
             <template v-if="col.severityField && col.labelField">
               <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
@@ -75,7 +75,7 @@ interface ChildProps<T> {
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
   //aFancierFunction: (param1: string) => T[];
-  aFancierFunction: (param1: string) => void;  
+  aFancierFunction: (param1: string) => Promise<void>;  
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -128,14 +128,14 @@ const runYetAnotherFunction = () => {
   result.value = props.triggerParentFunction();
 };
 
-const runAFancierFunction = () => {
+const runAFancierFunction = async () => {
   //fancyResult.value = props.aFancierFunction(updateSearch.value);
   if (updateSearch.value.length > 0) {
-    props.aFancierFunction(updateSearch.value);
+    await props.aFancierFunction(updateSearch.value);
     updateSearch.value = '';
   }
   else  
-    props.aFancierFunction('');
+    await props.aFancierFunction('');
 };
 
 /*
