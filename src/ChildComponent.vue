@@ -31,11 +31,11 @@
             </template>
           </template>                
         </Column>
-        <template #footer>
+        <!--template #footer>
           <div style="text-align: right">
             <Button icon="pi pi-external-link" label="Export as CSV" @click="exportCSV()" />
           </div>
-        </template>
+        </template -->
     </DataTable>
   </div>
   <div>
