@@ -1,5 +1,12 @@
 <template>
     <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
+    <Button label="Export CSV" @click="visible = true" />
+    <Dialog v-model:visible="visible" modal header="Download File">
+        <div class="flex align-items-center gap-3 mb-5">
+          <a :href="link" severity="secondary" @click="visible = false" target="_blank">{{ fileName }}</a>
+          <div>Click X to close dialog.</div>
+        </div>
+    </Dialog>    
     <div>
         <ChildComponent :triggerParentFunction="triggerParentFunction"
                         :customFunction="parentFunction" 
@@ -22,10 +29,13 @@ import constants from '@helpers/constants.ts'
 import ChildComponent from './ChildComponent.vue';
 import dateHelper from '@helpers/date-helpers';
 
+const visible = ref(false);
 const result = ref<number | null>(null);
 const dataObjectValues = ref({ property1: 13, property2: 114 });
 const param1 = ref<number>(0);
 const param2 = ref<number>(0);
+const link = ref('./src/hello.html')
+const fileName = ref('Hello.html')
 
 const utilityFunctionName = ref('getDateStringFromTimestamp');
 const utilityFunctionParams = ref<any>(null);
