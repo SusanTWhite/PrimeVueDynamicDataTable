@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card">   
     <DataTable :value="dataSet" ref="dt" tableStyle="min-width: 50rem">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2">
@@ -10,6 +10,7 @@
               placeholder="Search by name using ENTER to submit or ESCAPE to reset" 
               @keyup.enter="runAFancierFunction" 
               @keyup.escape="runAFancierFunction" />
+              <Button label="Add" icon="pi pi-plus" class="ml-2" @click="addNew" />
           </div>
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
@@ -31,11 +32,11 @@
             </template>
           </template>                
         </Column>
-        <!--template #footer>
-          <div style="text-align: right">
+        <template #footer>
+          <!--div style="text-align: right">
             <Button icon="pi pi-external-link" label="Export as CSV" @click="exportCSV()" />
-          </div>
-        </template -->
+          </div -->
+        </template>
     </DataTable>
   </div>
   <div>
@@ -79,7 +80,8 @@ interface ChildProps<T> {
   customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
-  aFancierFunction: (param1: string) => Promise<void>;  
+  aFancierFunction: (param1: string) => Promise<void>; 
+  addNew: () => void;
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -145,28 +147,26 @@ const runAFancierFunction = async () => {
 const exportCSV = () => {
     dt.value.exportCSV();
 };
-/*
-const nowStr = dayjs().format();
 
+const addNew = () => {
+  props.addNew();
+};
+/*
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {
   const column = columns.find((col) => 'field' in col && col.field === field && 'severityField' in col && col.severityField !== undefined);
-
   if (column && 'severityField' in column) {
     const severity = getSeverity(value);
     return severity !== undefined ? severity : null;
   }
-
   return null
 }
 
 function getLabelFromField(columns: Column[], field: keyof Column, value: string): string | null {
   const column = columns.find((col) => 'field' in col && col.field === field && 'labelField' in col && col.labelField !== undefined);
-
   if (column && 'labelField' in column) {
     const label = getLabel(value);
     return label !== undefined ? label : null;
   }
-
   return null
 }
 */
