@@ -15,7 +15,8 @@
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
                 :sortField="col.sortField??col.field" :header="col.header" 
-                :severityField="col.severityField??null" :labelField="col.labelField??null" sortable>
+                :severityField="col.severityField??null" :labelField="col.labelField??null">
+                <!-- :sortable="col.sortable??false"  :exportable="col.exportable??false"-->
           <template #body="slotProps">
             <template v-if="col.severityField && col.labelField">
               <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
@@ -27,10 +28,21 @@
             <template v-else-if="col.labelField">
               {{ getLabel(slotProps.data[col.labelField]) }}
             </template>
+            <template v-if="col.field==constants.fieldName.buttons">
+                <Button label="Edit" severity="info" class="mr-2" @click="edit()" />
+                <!--@click="edit(slotProps.data)"-->
+            </template >
             <template v-else>
               {{ slotProps.data[col.field] }}
-            </template>
-          </template>                
+            </template>           
+          </template>
+          <!--
+          <Column :exportable="false" style="min-width:8rem">
+              <template #body="slotProps">
+                  <Button severity="info" class="mr-2" @click="editProduct(slotProps.data)" />
+              </template>
+          </Column>
+          -->                
         </Column>
         <template #footer>
           <!--div style="text-align: right">
@@ -56,6 +68,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import constants from '@helpers/constants.ts'
 import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -71,9 +84,11 @@ type IdSetConfig = Record<string, SeveritySet>;
 interface ColumnType {
   field: string;
   header: string;
+  //sortable?: boolean;
   sortField?: string;
   severityField?: string;
   labelField?: string;
+  //exportable?: boolean;
 }
 
 interface ChildProps<T> {
@@ -82,6 +97,7 @@ interface ChildProps<T> {
   triggerParentFunction: () => number;
   aFancierFunction: (param1: string) => Promise<void>; 
   addNew: () => void;
+  edit: () => void;
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -150,6 +166,10 @@ const exportCSV = () => {
 
 const addNew = () => {
   props.addNew();
+};
+
+const edit = () => {
+  props.edit();
 };
 /*
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {

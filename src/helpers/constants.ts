@@ -6,6 +6,9 @@ export type severitySet = {
 export type IdSetConfig = Record<string, severitySet>;  
   
 export default {
+	fieldName: {
+		buttons: 'buttons'
+	},		
 	productIdSet: {
 		'-2': {
 		  severity: 'danger',
