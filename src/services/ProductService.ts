@@ -83,8 +83,7 @@ export const ProductService = {
                     inventoryStatus: '0',
                     rating: 4,
                     date: '2022-11-14',
-                    displayDate: '11/14/22',
-                    status: 'Medium'                    
+                    displayDate: '11/14/22'            
                 }
                 /*,
                 {

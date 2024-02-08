@@ -15,22 +15,36 @@
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
                 :sortField="col.sortField??col.field" :header="col.header" 
-                :severityField="col.severityField??null" :labelField="col.labelField??null" sortable>
+                :severityField="col.severityField??null" :labelField="col.labelField??null" :sortable="col.sortable??false">
+                <!--   :exportable="col.exportable??false"-->
           <template #body="slotProps">
-            <template v-if="col.severityField && col.labelField">
-              <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
-              <span class="sr-only"> {{ getLabel(slotProps.data[col.labelField]) }}</span>                        
-            </template>                                        
-            <template v-else-if="col.severityField" >
-              <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
-            </template>
-            <template v-else-if="col.labelField">
-              {{ getLabel(slotProps.data[col.labelField]) }}
-            </template>
-            <template v-else>
-              {{ slotProps.data[col.field] }}
-            </template>
-          </template>                
+            <div v-if="col.field!=constants.fieldName.buttons"> 
+              <template v-if="col.severityField && col.labelField">
+                <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
+                <span class="sr-only"> {{ getLabel(slotProps.data[col.labelField]) }}</span>                        
+              </template>                                        
+              <template v-else-if="col.severityField" >
+                <Tag :value="slotProps.data[col.field]" :severity="getSeverity(slotProps.data[col.severityField])" />
+              </template>
+              <template v-else-if="col.labelField">
+                {{ getLabel(slotProps.data[col.labelField]) }}
+              </template>
+              <template v-else>
+                {{ slotProps.data[col.field] }}
+              </template>                
+            </div>
+            <template v-if="col.field==constants.fieldName.buttons">
+              <CustomButton
+                  v-for="(button, index) in slotProps.data.buttons"
+                  :key="index"
+                  :label="button.label"
+                  :severity="button.severity"
+                  @click="buttonClick(index)" />              
+                <!-- Button label="Edit" severity="info" @click="edit()" / -->
+                <!--Button :label="Edit" :severity="info" :disabled="disabled" @click="edit()" / -->                
+                <!-- class="mr-2" @click="edit(slotProps.data)" disabled-->
+            </template >         
+          </template>
         </Column>
         <template #footer>
           <!--div style="text-align: right">
@@ -38,9 +52,6 @@
           </div -->
         </template>
     </DataTable>
-  </div>
-  <div>
-    <button @click="runMe">Run Me - I'm a call to the Parent</button>
   </div>
   <div>
     <button @click="runAnotherFunction">Call the Parent with passed parameters and return a value within the Parent</button>
@@ -56,6 +67,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import constants from '@helpers/constants.ts'
 import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -71,17 +83,19 @@ type IdSetConfig = Record<string, SeveritySet>;
 interface ColumnType {
   field: string;
   header: string;
+  sortable?: boolean;
   sortField?: string;
   severityField?: string;
   labelField?: string;
+  //exportable?: boolean;
 }
 
 interface ChildProps<T> {
-  customFunction: () => void;
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
   aFancierFunction: (param1: string) => Promise<void>; 
   addNew: () => void;
+  buttonClick: (index: number) => void;
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
@@ -91,6 +105,7 @@ interface ChildProps<T> {
 }
 
 const dt = ref();
+const index = ref(0);
 const props = defineProps<ChildProps<any>>();  
 const result = ref<number | null>(null);
 const updateSearch = ref<string>('');
@@ -103,14 +118,9 @@ function getSeverity(key: keyof IdSetConfig): string | undefined {
 
 function getLabel(key: keyof IdSetConfig): string | undefined {
   const entry = props.idSet[key];
-  return entry ? entry.severity : undefined;
+  //return entry ? entry.label : undefined;
+  return entry ? entry.severity : undefined;  
 }
-
-// Create a method to call the custom function from child
-const runMe = () => {
-  // Call the custom function directly
-  props.customFunction();
-};
 
 // Call the utility function dynamically
 const callParentUtility = () => {
@@ -150,6 +160,10 @@ const exportCSV = () => {
 
 const addNew = () => {
   props.addNew();
+};
+
+const buttonClick = (index: number) => {
+  props.buttonClick(index);
 };
 /*
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {

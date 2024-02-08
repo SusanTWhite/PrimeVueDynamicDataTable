@@ -9,8 +9,8 @@
     </Dialog>    
     <div>
         <ChildComponent :triggerParentFunction="triggerParentFunction"
-                        :customFunction="parentFunction"
-                        :addNew="addNew" 
+                        :addNew="addNew"
+                        :buttonClick="handleButtonClick"                        
                         :anotherFunction="anotherParentFunction"
                         :aFancierFunction="searchFunction"
                         :dataObjectValues="dataObjectValues" 
@@ -27,15 +27,15 @@
           <InputText id="name" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
           <small class="p-error" v-if="submitted && !product.name">Name is required.</small>
       </div>
-      <div class="field"  v-if="product">
+      <div class="field" v-if="product">
         <label for="inventoryStatus" class="mb-3">Inventory Status</label>
         <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
           <template #value="slotProps">
             <div v-if="slotProps.value && slotProps.value.value">
-              <Tag :value="slotProps.value.value"  />
+              <Tag :value="slotProps.value.value" />
             </div>
             <div v-else-if="slotProps.value && !slotProps.value.value">
-                <Tag :value="slotProps.value" />
+              <Tag :value="slotProps.value" />
             </div>
             <span v-else>
               {{slotProps.placeholder}}
@@ -60,6 +60,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import Button from 'primevue/button';
 import dayjs from 'dayjs'
 import { ProductService } from '@services/ProductService.ts';
 import constants from '@helpers/constants.ts'
@@ -82,25 +83,8 @@ const statuses = ref([
   {label: 'info', value: 'info'},  
   {label: 'warning', value: 'warning'},
   {label: 'danger', value: 'danger'},
-  {label: 'NEW', value: 'info'}
+  {label: 'NEW', value: 'new'}
 ]);
-
-const getStatusLabel = (status: string) => {
-    switch (status) {
-        case 'success':
-            return 'success';
-        case 'warning':
-            return 'warning';
-        case 'danger':
-            return 'danger';
-        case 'info':
-            return 'info';
-        case 'new':
-            return 'NEW';
-        default:
-            return null;
-    }
-};
 
 const utilityFunctionName = ref('getDateStringFromTimestamp');
 const utilityFunctionParams = ref<any>(null);
@@ -108,11 +92,12 @@ const productIdSet = ref(constants.productIdSet);
 const products = ref<ProductType[]>([]);
 const productsDataSet = ref<ProductType[]>([]);
 const columns = ref<ColumnType[]>([
-    { field: 'displayDate', header: 'Date', sortField: 'date'},
-    { field: 'code', header: 'Code', severityField: 'inventoryStatus'},
-    { field: 'name', header: 'Name', },
-    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus'},
-    { field: 'quantity', header: 'Quantity'}
+    { field: 'displayDate', header: 'Date', sortField: 'date', sortable: true }, //, exportable: true },
+    { field: 'code', header: 'Code', severityField: 'inventoryStatus', sortable: true }, //, exportable: true },
+    { field: 'name', header: 'Name', sortable: true }, //, exportable: true },
+    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus', sortable: true }, //, exportable: true },
+    { field: 'quantity', header: 'Quantity', sortable: true }, //, exportable: true },
+    { field: 'buttons', header: 'Action', sortable: false },  //, exportable: true },
 ]);
 
 interface DataObject {
@@ -123,9 +108,11 @@ interface DataObject {
 interface ColumnType {
   field: string;
   header: string;
+  sortable?: boolean;
   sortField?: string;
   severityField?: string;
   labelField?: string;
+  //exportable?: boolean;  
 }
 
 interface ProductType {
@@ -172,11 +159,6 @@ onMounted(() => {
     param2.value = 12;
 });
 
-const parentFunction = () => {
-  // Parent function logic
-  alert('You just executed a parent component function from a child component!');
-};
-
 const anotherParentFunction = (data: any) => {
   // Custom logic to process the object structure
   // For example, summing the values of some properties
@@ -221,9 +203,14 @@ const hideDialog = () => {
   submitted.value = false;
 };
 
-const editProduct = (prod: ProductType) => {
-  product.value = {...prod};
-  productDialog.value = true;
+const handleButtonClick = (index: number) => {
+  alert(`Button ${index + 1} clicked`);
+};
+
+const editProduct = () => {//(prod: ProductType) => {
+  // product.value = {...prod};
+  alert(`Here is the edit action for product product.value.name`);
+  // productDialog.value = true;
 };
 
 const saveProduct = () => {
@@ -234,16 +221,19 @@ const saveProduct = () => {
     if (product.value.id) {
         //product.value.inventoryStatus = product.value.inventoryStatus.value ? product.value.inventoryStatus.value : product.value.inventoryStatus;
         products.value[findIndexById(product.value.id)] = product.value;
+        productsDataSet.value = products.value;
         toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
     }
     else {
         product.value.id = createId();
         product.value.code = createId();
-        //product.value.inventoryStatus = 'new';
+        product.value.inventoryStatus !== '' ? product.value.inventoryStatus : '-2';
         product.value.quantity = product.value.quantity ?? 0;
-        product.value.date = dayjs().format('YYYY-MM-DD');         
-        product.value.displayDate = dayjs().format('MM/DD/YY');      
+        //product.value.date = dayjs().format('YYYY-MM-DD');         
+        product.value.displayDate = dayjs().format('M/D/YY');     
         products.value.push(product.value);
+        productsDataSet.value = products.value;
+        //NOT SURE why the toast message doesn't seem to be doing anything
         toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
     }
     productDialog.value = false;
