@@ -9,9 +9,8 @@
     </Dialog>    
     <div>
         <ChildComponent :triggerParentFunction="triggerParentFunction"
-                        :customFunction="parentFunction"
                         :addNew="addNew"
-                        :edit="editProduct"                        
+                        :buttonClick="handleButtonClick"                        
                         :anotherFunction="anotherParentFunction"
                         :aFancierFunction="searchFunction"
                         :dataObjectValues="dataObjectValues" 
@@ -61,6 +60,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import Button from 'primevue/button';
 import dayjs from 'dayjs'
 import { ProductService } from '@services/ProductService.ts';
 import constants from '@helpers/constants.ts'
@@ -86,35 +86,18 @@ const statuses = ref([
   {label: 'NEW', value: 'new'}
 ]);
 
-const getStatusLabel = (status: string) => {
-    switch (status) {
-        case 'success':
-            return 'success';
-        case 'warning':
-            return 'warning';
-        case 'danger':
-            return 'danger';
-        case 'info':
-            return 'info';
-        case 'NEW':
-            return 'new';            
-        default:
-            return 'new';            
-    }
-};
-
 const utilityFunctionName = ref('getDateStringFromTimestamp');
 const utilityFunctionParams = ref<any>(null);
 const productIdSet = ref(constants.productIdSet);
 const products = ref<ProductType[]>([]);
 const productsDataSet = ref<ProductType[]>([]);
 const columns = ref<ColumnType[]>([
-    { field: 'displayDate', header: 'Date', sortField: 'date' }, // sortable: true, exportable: true },
-    { field: 'code', header: 'Code', severityField: 'inventoryStatus' }, // sortable: true, exportable: true },
-    { field: 'name', header: 'Name'},  // sortable: true, exportable: true },
-    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus'}, // sortable: true, exportable: true },
-    { field: 'quantity', header: 'Quantity'},  // sortable: true, exportable: true },
-    { field: 'buttons', header: 'Action'},  // sortable: true, exportable: true },
+    { field: 'displayDate', header: 'Date', sortField: 'date', sortable: true }, //, exportable: true },
+    { field: 'code', header: 'Code', severityField: 'inventoryStatus', sortable: true }, //, exportable: true },
+    { field: 'name', header: 'Name', sortable: true }, //, exportable: true },
+    { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus', sortable: true }, //, exportable: true },
+    { field: 'quantity', header: 'Quantity', sortable: true }, //, exportable: true },
+    { field: 'buttons', header: 'Action', sortable: false },  //, exportable: true },
 ]);
 
 interface DataObject {
@@ -125,7 +108,7 @@ interface DataObject {
 interface ColumnType {
   field: string;
   header: string;
-  //sortable?: boolean;
+  sortable?: boolean;
   sortField?: string;
   severityField?: string;
   labelField?: string;
@@ -176,11 +159,6 @@ onMounted(() => {
     param2.value = 12;
 });
 
-const parentFunction = () => {
-  // Parent function logic
-  alert('You just executed a parent component function from a child component!');
-};
-
 const anotherParentFunction = (data: any) => {
   // Custom logic to process the object structure
   // For example, summing the values of some properties
@@ -223,6 +201,10 @@ const addNew = () => {
 const hideDialog = () => {
   productDialog.value = false;
   submitted.value = false;
+};
+
+const handleButtonClick = (index: number) => {
+  alert(`Button ${index + 1} clicked`);
 };
 
 const editProduct = () => {//(prod: ProductType) => {
