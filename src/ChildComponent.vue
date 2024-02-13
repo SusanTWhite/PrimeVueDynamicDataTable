@@ -10,7 +10,7 @@
               placeholder="Search by name using ENTER to submit or ESCAPE to reset" 
               @keyup.enter="searchFunction" 
               @keyup.escape="searchFunction" />
-              <Button label="Add" icon="pi pi-plus" class="ml-2" @click="addNew" />
+              <Button label="Add" icon="pi pi-plus" class="ml-2" @click="addNew"></Button>
           </div>
         </template>      
         <Column v-for="col of columns" :key="col.field" :field="col.field" 
