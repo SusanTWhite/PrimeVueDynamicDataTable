@@ -8,8 +8,8 @@
               v-model="updateSearch"
               type="text"
               placeholder="Search by name using ENTER to submit or ESCAPE to reset" 
-              @keyup.enter="runAFancierFunction" 
-              @keyup.escape="runAFancierFunction" />
+              @keyup.enter="searchFunction" 
+              @keyup.escape="searchFunction" />
               <Button label="Add" icon="pi pi-plus" class="ml-2" @click="addNew" />
           </div>
         </template>      
@@ -34,15 +34,18 @@
               </template>                
             </div>
             <template v-if="col.field==constants.fieldName.buttons">
-              <CustomButton
+              <Button
                   v-for="(button, index) in slotProps.data.buttons"
                   :key="index"
                   :label="button.label"
                   :severity="button.severity"
-                  @click="buttonClick(index)" />              
+                  :disabled="button.disabled"
+                  @click="buttonClick(index)" >
+                 {{ button.label }}
+              </Button>  
                 <!-- Button label="Edit" severity="info" @click="edit()" / -->
                 <!--Button :label="Edit" :severity="info" :disabled="disabled" @click="edit()" / -->                
-                <!-- class="mr-2" @click="edit(slotProps.data)" disabled-->
+                <!-- class="mr-2" @click="edit(slotProps.data)" disabled-->           
             </template >         
           </template>
         </Column>
@@ -71,6 +74,7 @@ import constants from '@helpers/constants.ts'
 import dateHelpers from '@helpers/date-helpers.ts'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 
 type SeveritySet = {
@@ -90,10 +94,16 @@ interface ColumnType {
   //exportable?: boolean;
 }
 
+interface ButtonType {
+  label: string;
+  severity: string;
+  disabled: boolean;
+}
+
 interface ChildProps<T> {
   anotherFunction: (data: { property1: number; property2: number }) => number;
   triggerParentFunction: () => number;
-  aFancierFunction: (param1: string) => Promise<void>; 
+  searchFunction: (param1: string) => Promise<void>; 
   addNew: () => void;
   buttonClick: (index: number) => void;
   dataObjectValues: { property1: number; property2: number };  
@@ -144,18 +154,17 @@ const runYetAnotherFunction = () => {
   result.value = props.triggerParentFunction();
 };
 
-const runAFancierFunction = async () => {
-  //fancyResult.value = props.aFancierFunction(updateSearch.value);
+const searchFunction = async () => {
   if (updateSearch.value.length > 0) {
-    await props.aFancierFunction(updateSearch.value);
+    await props.searchFunction(updateSearch.value);
     updateSearch.value = '';
   }
   else  
-    await props.aFancierFunction('');
+    await props.searchFunction('');
 };
 
 const exportCSV = () => {
-    dt.value.exportCSV();
+  dt.value.exportCSV();
 };
 
 const addNew = () => {
