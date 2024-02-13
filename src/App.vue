@@ -50,8 +50,8 @@
         </div>
       </div>
       <template #footer>
-          <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
-          <Button label="Save" icon="pi pi-check" text @click="saveProduct" />
+          <Button label="Cancel" icon="pi pi-times" text @click="hideDialog"></Button>
+          <Button label="Save" icon="pi pi-check" text @click="saveProduct"></Button>
       </template>
     </Dialog>
   <!---->    
@@ -141,9 +141,9 @@ const initializeProduct = (product?: ProductType): ProductType => {
 	if (!product) {
 		product = {} as ProductType;
 	}
-  if (!product.buttons) {
-    product.buttons = [] as ButtonType[]; 
-  }
+  //if (!product.buttons) {
+  //  product.buttons = [] as ButtonType[]; 
+  //}
 	product.id = '';
 	product.code = '';
 	product.name = '';
@@ -161,19 +161,19 @@ const initializeProduct = (product?: ProductType): ProductType => {
 };
 
 onMounted(() => {
-    ProductService.getProductsMini().then((data) => {
-      data.forEach(item => {
-        // Modify buttons based on product's quantity
-        item.buttons.forEach(button => {
-          button.disabled = item.quantity === 0 && button.label === 'Edit';
-        });
+  ProductService.getProductsMini().then((data) => {
+    data.forEach(item => {
+      // Modify buttons based on product's quantity
+      item.buttons?.forEach(button => {
+        button.disabled = (item.quantity === 0 && button.label === 'Edit') || button.disabled;
+      });
       products.value = data;
       productsDataSet.value = data;
-      });
     });
     utilityFunctionParams.value = dayjs();
     param1.value = 37;
     param2.value = 12;
+  });
 });
 
 const anotherParentFunction = (data: any) => {
