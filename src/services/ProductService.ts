@@ -29,7 +29,6 @@ export const ProductService = {
                     rating: 4,
                     date: '2020-06-11',
                     displayDate: '6/11/20',
-                    //buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: true }]
                 },
                 {
                     id: '1002',
