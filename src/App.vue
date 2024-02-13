@@ -12,7 +12,7 @@
                         :addNew="addNew"
                         :buttonClick="handleButtonClick"                        
                         :anotherFunction="anotherParentFunction"
-                        :aFancierFunction="searchFunction"
+                        :searchFunction="searchFunction"
                         :dataObjectValues="dataObjectValues" 
                         :columns="columns" 
                         :dataSet="productsDataSet"
@@ -97,7 +97,7 @@ const columns = ref<ColumnType[]>([
     { field: 'name', header: 'Name', sortable: true }, //, exportable: true },
     { field: 'inventoryStatus', header: 'Status', labelField: 'inventoryStatus', sortable: true }, //, exportable: true },
     { field: 'quantity', header: 'Quantity', sortable: true }, //, exportable: true },
-    { field: 'buttons', header: 'Action', sortable: false },  //, exportable: true },
+    { field: 'buttons', header: 'Action', sortable: false },  //, exportable: false },
 ]);
 
 interface DataObject {
@@ -127,13 +127,23 @@ interface ProductType {
     inventoryStatus: string,
     rating: number,
     date: string,
-    displayDate: string
+    displayDate: string,
+    buttons?: ButtonType[]
+}
+
+interface ButtonType {
+  label: string;
+  severity?: string;
+  disabled?: boolean;
 }
 
 const initializeProduct = (product?: ProductType): ProductType => {
 	if (!product) {
 		product = {} as ProductType;
 	}
+  if (!product.buttons) {
+    product.buttons = [] as ButtonType[]; 
+  }
 	product.id = '';
 	product.code = '';
 	product.name = '';
@@ -145,13 +155,14 @@ const initializeProduct = (product?: ProductType): ProductType => {
 	product.inventoryStatus = '';  
   product.rating = 0;
 	product.date = '';  
-	product.displayDate = '';      
+	product.displayDate = '';
+  product.buttons = [] as ButtonType[]
 	return product;
 };
 
 onMounted(() => {
     ProductService.getProductsMini().then((data) => {
-        products.value = data; 
+        products.value = data;
         productsDataSet.value = data;
     });
     utilityFunctionParams.value = dayjs();
@@ -188,8 +199,6 @@ const parentDirect = () => {
 const searchFunction = async (searchValue: string) => {
     //alert(`Parent received search value: ${searchValue}`)
     productsDataSet.value = products.value.filter((row) => row.name.includes(searchValue));
-    //const derivedData = products.value.filter((row) => row.name.includes(searchValue));    
-    //return derivedData;
 };
 
 const addNew = () => {
@@ -222,6 +231,7 @@ const saveProduct = () => {
         //product.value.inventoryStatus = product.value.inventoryStatus.value ? product.value.inventoryStatus.value : product.value.inventoryStatus;
         products.value[findIndexById(product.value.id)] = product.value;
         productsDataSet.value = products.value;
+        //NOT SURE why the toast message doesn't seem to be doing anything        
         toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
     }
     else {
@@ -235,6 +245,7 @@ const saveProduct = () => {
         productsDataSet.value = products.value;
         //NOT SURE why the toast message doesn't seem to be doing anything
         toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+        //should eventually save the new row back into the structure permanently
     }
     productDialog.value = false;
     //product.value = {}
