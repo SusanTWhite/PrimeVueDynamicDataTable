@@ -14,7 +14,7 @@ export const ProductService = {
                     rating: 5,
                     date: '2024-01-18',
                     displayDate: '1/18/24',
-                    buttons: [{ label: 'Edit', severity: 'info' ,disabled: false }]
+                    buttons: [{ label: 'Edit', severity: 'info'}]
                 },
                 {
                     id: '1001',
@@ -29,7 +29,7 @@ export const ProductService = {
                     rating: 4,
                     date: '2020-06-11',
                     displayDate: '6/11/20',
-                    buttons: []
+                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: true }]
                 },
                 {
                     id: '1002',
@@ -44,7 +44,7 @@ export const ProductService = {
                     rating: 3,
                     date: '2020-09-04',
                     displayDate: '9/4/20',
-                    buttons: []
+                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: true }]
                 },
                 {
                     id: '1003',
