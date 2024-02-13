@@ -162,31 +162,19 @@ const initializeProduct = (product?: ProductType): ProductType => {
 
 onMounted(() => {
   ProductService.getProductsMini().then((data) => {
-    products.value = data; 
-    productsDataSet.value = data;
-  });
-  utilityFunctionParams.value = dayjs();
-  param1.value = 37;
-  param2.value = 12;
-});
-/*
-onMounted(() => {
-  ProductService.getProductsMini().then((data) => {
-    //
     data.forEach(item => {
       // Modify buttons based on product's quantity
-      item.buttons.forEach(button => {
-        button.disabled = item.quantity === 0 && button.label === 'Edit';
+      item.buttons?.forEach(button => {
+        button.disabled = (item.quantity === 0 && button.label === 'Edit') || button.disabled;
       });
+      products.value = data;
+      productsDataSet.value = data;
     });
-    //
-    products.value = data;
     utilityFunctionParams.value = dayjs();
     param1.value = 37;
     param2.value = 12;
   });
 });
-*/
 
 const anotherParentFunction = (data: any) => {
   // Custom logic to process the object structure
