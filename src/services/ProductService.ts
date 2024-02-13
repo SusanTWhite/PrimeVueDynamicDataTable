@@ -59,7 +59,7 @@ export const ProductService = {
                     rating: 5,
                     date: '2021-10-08',
                     displayDate: '10/8/21',
-                    //buttons: [{ label: 'Reset', severity: 'info', disabled: false }]
+                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: false }]
                 },
                 {
                     id: '1004',
