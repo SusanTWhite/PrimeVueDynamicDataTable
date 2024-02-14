@@ -1,6 +1,7 @@
 <template>
   <div class="card">   
-    <DataTable :value="dataSet" ref="dt" tableStyle="min-width: 50rem">
+    <DataTable :value="dataSet" ref="dt" tableStyle="min-width: 50rem"
+               @row-click="onRowClick($event as RowClickEvent)">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2">
             <InputText
@@ -9,7 +10,7 @@
               type="text"
               placeholder="Search by name using ENTER to submit or ESCAPE to reset" 
               @keyup.enter="searchFunction" 
-              @keyup.escape="searchFunction" />
+              @keyup.escape="searchFunction"/>
               <Button label="Add" icon="pi pi-plus" class="ml-2" @click="addNew"></Button>
           </div>
         </template>      
@@ -34,13 +35,14 @@
               </template>                
             </div>
             <template v-if="col.field==constants.fieldName.buttons">
+              <!-- v-for="(button, index) in rowData.buttons" :key="index" @click="handleButtonClick(rowData.id, button)" :disabled="button.disabled">-->
               <Button class="mr-1"
                   v-for="(button, index) in slotProps.data.buttons"
                   :key="index"
                   :label="button.label"
                   :severity="button.severity"
                   :disabled="button.disabled"
-                  @click="buttonClick(index)"></Button>
+                  @click="onRowButtonClick(slotProps, index)"></Button>
             </template >         
           </template>
         </Column>
@@ -100,13 +102,23 @@ interface ChildProps<T> {
   triggerParentFunction: () => number;
   searchFunction: (param1: string) => Promise<void>; 
   addNew: () => void;
-  buttonClick: (index: number) => void;
+  rowClick: (event: RowClickEvent) => void;  
+  buttonClick: (event: RowClickEvent, index: number) => void;
   dataObjectValues: { property1: number; property2: number };  
   utilityFunctionName: string;
   utilityFunctionParams: any;
   columns: ColumnType[];
   dataSet: T[];
   idSet: IdSetConfig;
+}
+
+interface RowClickEvent {
+	data: any;
+	index: number;
+}
+
+interface RowButtonClickEvent extends RowClickEvent {
+  buttonIndex: number;
 }
 
 const dt = ref();
@@ -166,8 +178,12 @@ const addNew = () => {
   props.addNew();
 };
 
-const buttonClick = (index: number) => {
-  props.buttonClick(index);
+const onRowClick = (evt: RowClickEvent) => {
+  props.rowClick(evt);
+};
+
+const onRowButtonClick = (evt: RowClickEvent, index: number) => {
+  props.buttonClick(evt, index);
 };
 /*
 function getSeverityFromField(columns: Column[], field: keyof Column, value: string): string | null {
