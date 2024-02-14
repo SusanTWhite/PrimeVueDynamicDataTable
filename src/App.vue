@@ -10,6 +10,7 @@
     <div>
         <ChildComponent :triggerParentFunction="triggerParentFunction"
                         :addNew="addNew"
+                        :rowClick="handleRowClick"      
                         :buttonClick="handleButtonClick"                        
                         :anotherFunction="anotherParentFunction"
                         :searchFunction="searchFunction"
@@ -99,6 +100,15 @@ const columns = ref<ColumnType[]>([
     { field: 'quantity', header: 'Quantity', sortable: true }, //, exportable: true },
     { field: 'buttons', header: 'Action', sortable: false },  //, exportable: false },
 ]);
+
+interface DTRowClickEvent {
+	data: any;
+	index: number;
+}
+
+interface DTRowButtonClickEvent extends DTRowClickEvent {
+  buttonIndex: number;
+}
 
 interface DataObject {
   property1: number;
@@ -217,13 +227,13 @@ const hideDialog = () => {
   productDialog.value = false;
   submitted.value = false;
 };
-/*
-const handleButtonClick = (index: number) => {
-  alert(`Button ${index + 1} clicked`);
+
+const handleRowClick = (evt: DTRowClickEvent) => {
+  alert(`Row ${evt.data.index+1} clicked`);
 };
-*/
-const handleButtonClick = (label: string) => {
-  alert(`Button ${label} clicked`);
+
+const handleButtonClick = (evt: DTRowClickEvent, buttonIndex: number) => {
+  alert(`Button ${evt.data.buttons[buttonIndex].label} for Product ${evt.data.name}(${evt.data.code}) on row ${evt.index} clicked`);
 };
 
 const editProduct = () => {//(prod: ProductType) => {
