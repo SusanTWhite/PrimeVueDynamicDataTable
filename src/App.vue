@@ -141,9 +141,9 @@ const initializeProduct = (product?: ProductType): ProductType => {
 	if (!product) {
 		product = {} as ProductType;
 	}
-  //if (!product.buttons) {
-  //  product.buttons = [] as ButtonType[]; 
-  //}
+  if (!product.buttons) {
+    product.buttons = [] as ButtonType[]; 
+  }
 	product.id = '';
 	product.code = '';
 	product.name = '';
@@ -217,9 +217,13 @@ const hideDialog = () => {
   productDialog.value = false;
   submitted.value = false;
 };
-
+/*
 const handleButtonClick = (index: number) => {
   alert(`Button ${index + 1} clicked`);
+};
+*/
+const handleButtonClick = (label: string) => {
+  alert(`Button ${label} clicked`);
 };
 
 const editProduct = () => {//(prod: ProductType) => {

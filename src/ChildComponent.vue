@@ -34,13 +34,14 @@
               </template>                
             </div>
             <template v-if="col.field==constants.fieldName.buttons">
+              <!-- v-for="(button, index) in slotProps.data.buttons" :key="index" @click="buttonClick(index)">-->
               <Button class="mr-1"
-                  v-for="(button, index) in slotProps.data.buttons"
-                  :key="index"
+                  v-for="button in slotProps.data.buttons"
+                  :key="button.label"
                   :label="button.label"
                   :severity="button.severity"
                   :disabled="button.disabled"
-                  @click="buttonClick(index)"></Button>
+                  @click="buttonClick(button.label)"></Button>
             </template >         
           </template>
         </Column>
