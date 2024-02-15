@@ -170,20 +170,21 @@ const initializeProduct = (product?: ProductType): ProductType => {
 	return product;
 };
 
-onMounted(() => {
-  ProductService.getProductsMini().then((data) => {
-    data.forEach(item => {
-      // Modify buttons based on product's quantity
-      item.buttons?.forEach(button => {
-        button.disabled = (item.quantity === 0 && button.label === 'Edit') || button.disabled;
-      });
-      products.value = data;
-      productsDataSet.value = data;
+onMounted(async () => {
+  let results = await ProductService.getProductsMini();
+  results = results.map((row) => {
+    // Modify buttons based on product's quantity
+    row.buttons?.forEach(button => {
+      button.disabled = (row.quantity === 0 && button.label === 'Edit') || button.disabled;
+      return button;
     });
-    utilityFunctionParams.value = dayjs();
-    param1.value = 37;
-    param2.value = 12;
-  });
+    return row;
+  });   
+  products.value = results;
+  productsDataSet.value = results;
+  utilityFunctionParams.value = dayjs();
+  param1.value = 37;
+  param2.value = 12;
 });
 
 const anotherParentFunction = (data: any) => {

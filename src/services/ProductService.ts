@@ -43,7 +43,7 @@ export const ProductService = {
                     rating: 3,
                     date: '2020-09-04',
                     displayDate: '9/4/20',
-                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: true }]
+                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info'}]
                 },
                 {
                     id: '1003',
@@ -58,7 +58,7 @@ export const ProductService = {
                     rating: 5,
                     date: '2021-10-08',
                     displayDate: '10/8/21',
-                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: false }]
+                    buttons: [{ label: 'Edit', severity: 'info'}, { label: 'Reset', severity: 'info', disabled: true }]
                 },
                 {
                     id: '1004',
