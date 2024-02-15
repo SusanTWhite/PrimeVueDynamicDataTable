@@ -117,12 +117,7 @@ interface RowClickEvent {
 	index: number;
 }
 
-interface RowButtonClickEvent extends RowClickEvent {
-  buttonIndex: number;
-}
-
 const dt = ref();
-const index = ref(0);
 const props = defineProps<ChildProps<any>>();  
 const result = ref<number | null>(null);
 const updateSearch = ref<string>('');
