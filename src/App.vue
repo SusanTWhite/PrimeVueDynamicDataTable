@@ -166,7 +166,7 @@ const initializeProduct = (product?: ProductType): ProductType => {
   product.rating = 0;
 	product.date = '';  
 	product.displayDate = '';
-  //product.buttons = [] as ButtonType[]
+  product.buttons = [] as ButtonType[]
 	return product;
 };
 

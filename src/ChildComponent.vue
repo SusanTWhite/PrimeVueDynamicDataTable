@@ -35,7 +35,6 @@
               </template>                
             </div>
             <template v-if="col.field==constants.fieldName.buttons">
-              <!-- v-for="(button, index) in rowData.buttons" :key="index" @click="handleButtonClick(rowData.id, button)" :disabled="button.disabled">-->
               <Button class="mr-1"
                   v-for="(button, index) in slotProps.data.buttons"
                   :key="index"
