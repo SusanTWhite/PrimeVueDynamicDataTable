@@ -233,7 +233,7 @@ const handleRowClick = (evt: DTRowClickEvent) => {
 };
 
 const handleButtonClick = (evt: DTRowClickEvent, buttonIndex: number) => {
-  alert(`Button ${evt.data.buttons[buttonIndex].label} for Product ${evt.data.name}(${evt.data.code}) on row ${evt.index} clicked`);
+  alert(`Button ${evt.data.buttons[buttonIndex].label} for Product ${evt.data.name} (${evt.data.code}) on row ${evt.index+1} clicked`);
 };
 
 const editProduct = () => {//(prod: ProductType) => {
