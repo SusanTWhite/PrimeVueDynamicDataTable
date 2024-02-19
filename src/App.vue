@@ -1,5 +1,4 @@
 <template>
-    <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <!-- Button label="Export CSV" @click="visible = true" /> -->
     <Dialog v-model:visible="visible" modal header="Download File">
         <div class="flex align-items-center gap-3 mb-5">
@@ -21,6 +20,7 @@
                         :utilityFunctionName="utilityFunctionName" 
                         :utilityFunctionParams="utilityFunctionParams" />
     </div>
+    <div><button @click="parentDirect">Click to have Parent call different utility function</button></div>
     <!---->
     <Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
       <div class="field" v-if="product">
